@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCarrello } from "@/context/CarrelloContext";
 
@@ -18,6 +18,20 @@ const Checkout = () => {
 
     const selezionati = carrello.filter((item) => item.selezionato);
     const total = selezionati.reduce((acc, item) => acc + item.price * item.quantita, 0);
+
+    useEffect(() => {
+        const caricaUltimoIndirizzo = async () => {
+            try {
+                const response = await fetch("/api/indirizzo");
+                if (!response.ok) return;
+                const { indirizzo: ultimo } = await response.json();
+                if (ultimo) setIndirizzo(ultimo);
+            } catch {
+                // nessun indirizzo suggerito, l'utente lo compila da zero
+            }
+        };
+        caricaUltimoIndirizzo();
+    }, []);
 
     const confermaIndirizzo = async (e) => {
         e.preventDefault();

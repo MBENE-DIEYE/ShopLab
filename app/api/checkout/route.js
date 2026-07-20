@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import { getUtenteCorrente } from "@/lib/auth";
 import { inviaConfermaOrdine } from "@/lib/mail";
 
@@ -23,6 +24,11 @@ export async function POST(request) {
         console.error("Invio email conferma ordine fallito:", err);
         emailInviata = false;
     }
+
+    await prisma.user.update({
+        where: { id: utente.userId },
+        data: { ultimoIndirizzo: indirizzo },
+    });
 
     return Response.json({ ordine, emailInviata });
 }
