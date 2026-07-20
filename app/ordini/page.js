@@ -68,7 +68,7 @@ const MieiOrdini = () => {
         <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
             <div className="max-w-2xl mx-auto p-6 md:p-8">
                 <h1 className="text-2xl font-bold mb-3 text-gray-900 text-center">I miei ordini</h1>
-                <Link href="/dashboard" className="block mb-6 text-indigo-600 text-sm font-medium hover:underline">← Torna allo shopping</Link>
+                <Link href="/account" className="block mb-6 text-indigo-600 text-sm font-medium hover:underline">← Torna al profilo</Link>
 
                 {caricamento ? (
                     <div className="space-y-4">
@@ -98,12 +98,14 @@ const MieiOrdini = () => {
                                 <div className="divide-y divide-gray-100 border-t border-gray-100">
                                     {ordine.articoli.map((articolo) => {
                                         const isEspanso = espanso?.ordineId === ordine.id && espanso?.articoloId === articolo.id;
-                                        const altri = ordine.articoli.filter((a) => a.id !== articolo.id);
                                         return (
                                             <div key={articolo.id}>
                                                 <button
-                                                    onClick={() => setEspanso(isEspanso ? null : { ordineId: ordine.id, articoloId: articolo.id })}
-                                                    onDoubleClick={() => router.push(`/dashboard?highlight=${articolo.productId}`)}
+                                                    onClick={() =>
+                                                        isEspanso
+                                                            ? router.push(`/dashboard?highlight=${articolo.productId}`)
+                                                            : setEspanso({ ordineId: ordine.id, articoloId: articolo.id })
+                                                    }
                                                     className={`flex items-center gap-4 p-4 w-full text-left transition-colors ${isEspanso ? "bg-indigo-50/60" : "hover:bg-gray-50"}`}
                                                 >
                                                     <div className="h-12 w-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
@@ -127,21 +129,7 @@ const MieiOrdini = () => {
                                                             </span>
                                                         </div>
                                                         <TrackingOrdine tracking={ordine.tracking} />
-                                                        <p className="text-[11px] text-gray-400 mb-2">Doppio click sul prodotto per vederlo nello shop.</p>
-
-                                                        {altri.length > 0 && (
-                                                            <div className="border-t border-indigo-100 pt-3">
-                                                                <p className="text-xs font-medium text-gray-500 mb-2">Altri articoli in quest'ordine</p>
-                                                                <div className="space-y-1.5">
-                                                                    {altri.map((altro) => (
-                                                                        <div key={altro.id} className="flex items-center gap-2 text-xs text-gray-500">
-                                                                            <span className="h-1.5 w-1.5 rounded-full bg-gray-300 shrink-0" />
-                                                                            {altro.title} × {altro.quantita}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        )}
+                                                        <p className="text-[11px] text-gray-400">Clicca di nuovo per vederlo nello shop.</p>
                                                     </div>
                                                 )}
                                             </div>

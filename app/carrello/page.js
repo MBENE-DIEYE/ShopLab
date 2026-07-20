@@ -154,7 +154,7 @@ const Carrello = () => {
                         className="bg-white rounded-2xl w-full max-w-lg max-h-[80vh] flex flex-col overflow-hidden"
                     >
                         <div className="flex items-center justify-between p-4 border-b border-gray-100 shrink-0">
-                            <h2 className="font-semibold text-gray-900">Simili a "{simili.item.title}"</h2>
+                            <h2 className="font-semibold text-gray-900">Simili a &quot;{simili.item.title}&quot;</h2>
                             <button onClick={() => setSimili(null)} className="h-8 w-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

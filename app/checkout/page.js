@@ -45,7 +45,7 @@ const Checkout = () => {
             const response = await fetch("/api/indirizzo/verifica", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ citta: indirizzo.citta, cap: indirizzo.cap }),
+                body: JSON.stringify({ via: indirizzo.via, citta: indirizzo.citta, cap: indirizzo.cap }),
             });
             const dati = await response.json();
             if (!dati.valido) {

@@ -104,8 +104,13 @@ const ProdottoDettaglio = () => {
 
             <div className="max-w-4xl mx-auto p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div className="h-80 md:h-96 bg-white rounded-2xl border border-gray-100 flex items-center justify-center p-8">
+                    <div className="relative h-80 md:h-96 bg-white rounded-2xl border border-gray-100 flex items-center justify-center p-8">
                         <img src={prodotto.image} alt={prodotto.title} className="max-h-full max-w-full object-contain" />
+                        {appenaAggiunto && (
+                            <span className="absolute top-3 right-3 bg-indigo-600 text-white text-[11px] font-medium px-2 py-1 rounded-full">
+                                Aggiunto
+                            </span>
+                        )}
                     </div>
 
                     <div className="flex flex-col">
@@ -156,18 +161,12 @@ const ProdottoDettaglio = () => {
 
                         <button
                             onClick={handleAggiungi}
-                            className={`w-full flex items-center justify-center gap-1.5 text-white text-sm font-medium py-3 rounded-xl mt-auto transition-colors ${appenaAggiunto ? "bg-green-500" : "bg-indigo-500 hover:bg-indigo-600"}`}
+                            className="w-full flex items-center justify-center gap-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-3 rounded-xl mt-auto transition-colors"
                         >
-                            {appenaAggiunto ? (
-                                "✓ Aggiunto al carrello"
-                            ) : (
-                                <>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                    Aggiungi al carrello
-                                </>
-                            )}
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            Aggiungi al carrello
                         </button>
                     </div>
                 </div>

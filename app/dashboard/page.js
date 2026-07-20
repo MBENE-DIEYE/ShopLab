@@ -104,9 +104,9 @@ const DashboardContenuto = () => {
                             className="w-full bg-gray-100 rounded-full pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
                         />
                     </div>
-                    <Link href="/ordini" title="I miei ordini" className="flex items-center justify-center bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 shrink-0 transition-colors">
+                    <Link href="/account" title="Il mio account" className="flex items-center justify-center bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 shrink-0 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                         </svg>
                     </Link>
                     <Link href="/carrello" className="relative flex items-center justify-center bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 shrink-0 transition-colors">
