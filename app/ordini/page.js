@@ -49,6 +49,7 @@ const MieiOrdini = () => {
     const router = useRouter();
     const [ordini, setOrdini] = useState([]);
     const [caricamento, setCaricamento] = useState(true);
+    const [espanso, setEspanso] = useState(null); // { ordineId, articoloId }
 
     useEffect(() => {
         const caricaOrdini = async () => {
@@ -94,27 +95,58 @@ const MieiOrdini = () => {
                                     </div>
                                 </div>
 
-                                <TrackingOrdine tracking={ordine.tracking} />
-
                                 <div className="divide-y divide-gray-100 border-t border-gray-100">
-                                    {ordine.articoli.map((articolo) => (
-                                        <button
-                                            key={articolo.id}
-                                            onClick={() => router.push(`/dashboard?highlight=${articolo.productId}`)}
-                                            className="flex items-center gap-4 p-4 w-full text-left hover:bg-gray-50 transition-colors"
-                                        >
-                                            <div className="h-12 w-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
-                                                {articolo.image && <img src={articolo.image} alt={articolo.title} className="h-9 w-9 object-contain" />}
+                                    {ordine.articoli.map((articolo) => {
+                                        const isEspanso = espanso?.ordineId === ordine.id && espanso?.articoloId === articolo.id;
+                                        const altri = ordine.articoli.filter((a) => a.id !== articolo.id);
+                                        return (
+                                            <div key={articolo.id}>
+                                                <button
+                                                    onClick={() => setEspanso(isEspanso ? null : { ordineId: ordine.id, articoloId: articolo.id })}
+                                                    onDoubleClick={() => router.push(`/dashboard?highlight=${articolo.productId}`)}
+                                                    className={`flex items-center gap-4 p-4 w-full text-left transition-colors ${isEspanso ? "bg-indigo-50/60" : "hover:bg-gray-50"}`}
+                                                >
+                                                    <div className="h-12 w-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                                                        {articolo.image && <img src={articolo.image} alt={articolo.title} className="h-9 w-9 object-contain" />}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-sm text-gray-800 truncate">{articolo.title}</p>
+                                                        <p className="text-xs text-gray-500 mt-0.5">
+                                                            Quantità {articolo.quantita}{articolo.taglia && <span className="text-gray-400"> · Taglia {articolo.taglia}</span>}
+                                                        </p>
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-900 shrink-0">{(articolo.price * articolo.quantita).toFixed(2)}€</span>
+                                                </button>
+
+                                                {isEspanso && (
+                                                    <div className="bg-indigo-50/60 px-4 pb-4">
+                                                        <div className="flex items-center justify-between mb-1">
+                                                            <p className="text-xs font-medium text-gray-600">Stato consegna</p>
+                                                            <span className={`inline-block text-[11px] font-medium px-2 py-0.5 rounded-full ${COLORI_STATO[ordine.tracking.stato]}`}>
+                                                                {ordine.tracking.etichetta}
+                                                            </span>
+                                                        </div>
+                                                        <TrackingOrdine tracking={ordine.tracking} />
+                                                        <p className="text-[11px] text-gray-400 mb-2">Doppio click sul prodotto per vederlo nello shop.</p>
+
+                                                        {altri.length > 0 && (
+                                                            <div className="border-t border-indigo-100 pt-3">
+                                                                <p className="text-xs font-medium text-gray-500 mb-2">Altri articoli in quest'ordine</p>
+                                                                <div className="space-y-1.5">
+                                                                    {altri.map((altro) => (
+                                                                        <div key={altro.id} className="flex items-center gap-2 text-xs text-gray-500">
+                                                                            <span className="h-1.5 w-1.5 rounded-full bg-gray-300 shrink-0" />
+                                                                            {altro.title} × {altro.quantita}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm text-gray-800 truncate">{articolo.title}</p>
-                                                <p className="text-xs text-gray-500 mt-0.5">
-                                                    Quantità {articolo.quantita}{articolo.taglia && <span className="text-gray-400"> · Taglia {articolo.taglia}</span>}
-                                                </p>
-                                            </div>
-                                            <span className="text-sm font-medium text-gray-900 shrink-0">{(articolo.price * articolo.quantita).toFixed(2)}€</span>
-                                        </button>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
 
                                 <div className="px-4 py-3 border-t border-gray-100 bg-gray-50/40">
