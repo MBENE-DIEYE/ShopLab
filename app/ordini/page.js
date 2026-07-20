@@ -1,11 +1,52 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const formattaData = (iso) =>
     new Date(iso).toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
 
+const COLORI_STATO = {
+    in_elaborazione: "bg-amber-50 text-amber-600",
+    spedito: "bg-blue-50 text-blue-600",
+    in_consegna: "bg-indigo-50 text-indigo-600",
+    consegnato: "bg-green-50 text-green-600",
+};
+
+const TrackingOrdine = ({ tracking }) => (
+    <div className="px-4 py-4">
+        <div className="flex items-center">
+            {tracking.fasi.map((fase, i) => (
+                <div key={fase} className="flex items-center flex-1 last:flex-none">
+                    <div className="flex flex-col items-center">
+                        <div
+                            className={`h-6 w-6 rounded-full flex items-center justify-center shrink-0 ${
+                                i <= tracking.indice ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-400"
+                            }`}
+                        >
+                            {i < tracking.indice ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                </svg>
+                            ) : (
+                                <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                            )}
+                        </div>
+                        <span className={`text-[10px] mt-1.5 text-center w-16 ${i <= tracking.indice ? "text-gray-700 font-medium" : "text-gray-400"}`}>
+                            {fase}
+                        </span>
+                    </div>
+                    {i < tracking.fasi.length - 1 && (
+                        <div className={`flex-1 h-0.5 mb-4 ${i < tracking.indice ? "bg-indigo-600" : "bg-gray-200"}`} />
+                    )}
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
 const MieiOrdini = () => {
+    const router = useRouter();
     const [ordini, setOrdini] = useState([]);
     const [caricamento, setCaricamento] = useState(true);
 
@@ -45,12 +86,23 @@ const MieiOrdini = () => {
                                         <p className="text-sm font-semibold text-gray-900 font-mono">{ordine.numero}</p>
                                         <p className="text-xs text-gray-500">{formattaData(ordine.createdAt)}</p>
                                     </div>
-                                    <p className="text-lg font-bold text-gray-900">{ordine.totale.toFixed(2)}€</p>
+                                    <div className="text-right">
+                                        <p className="text-lg font-bold text-gray-900">{ordine.totale.toFixed(2)}€</p>
+                                        <span className={`inline-block text-[11px] font-medium px-2 py-0.5 rounded-full mt-1 ${COLORI_STATO[ordine.tracking.stato]}`}>
+                                            {ordine.tracking.etichetta}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <div className="divide-y divide-gray-100">
+                                <TrackingOrdine tracking={ordine.tracking} />
+
+                                <div className="divide-y divide-gray-100 border-t border-gray-100">
                                     {ordine.articoli.map((articolo) => (
-                                        <div key={articolo.id} className="flex items-center gap-4 p-4">
+                                        <button
+                                            key={articolo.id}
+                                            onClick={() => router.push(`/dashboard?highlight=${articolo.productId}`)}
+                                            className="flex items-center gap-4 p-4 w-full text-left hover:bg-gray-50 transition-colors"
+                                        >
                                             <div className="h-12 w-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
                                                 {articolo.image && <img src={articolo.image} alt={articolo.title} className="h-9 w-9 object-contain" />}
                                             </div>
@@ -61,7 +113,7 @@ const MieiOrdini = () => {
                                                 </p>
                                             </div>
                                             <span className="text-sm font-medium text-gray-900 shrink-0">{(articolo.price * articolo.quantita).toFixed(2)}€</span>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
 

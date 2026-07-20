@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getUtenteCorrente } from "@/lib/auth";
+import { calcolaTracking } from "@/lib/tracking";
 
 export async function GET() {
     const utente = await getUtenteCorrente();
@@ -11,5 +12,10 @@ export async function GET() {
         include: { articoli: true },
     });
 
-    return Response.json({ ordini });
+    const conTracking = ordini.map((ordine) => ({
+        ...ordine,
+        tracking: calcolaTracking(ordine.createdAt),
+    }));
+
+    return Response.json({ ordini: conTracking });
 }
