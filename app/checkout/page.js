@@ -3,8 +3,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCarrello } from "@/context/CarrelloContext";
 
-const numeroOrdine = () => `SL-${Math.floor(100000 + Math.random() * 900000)}`;
-
 const INDIRIZZO_VUOTO = { nome: "", via: "", citta: "", cap: "" };
 
 const Checkout = () => {
@@ -14,6 +12,8 @@ const Checkout = () => {
     const [erroreIndirizzo, setErroreIndirizzo] = useState("");
     const [elaborazione, setElaborazione] = useState(false);
     const [ordine, setOrdine] = useState(null);
+    const [emailInviata, setEmailInviata] = useState(true);
+    const [erroreConferma, setErroreConferma] = useState("");
 
     const selezionati = carrello.filter((item) => item.selezionato);
     const total = selezionati.reduce((acc, item) => acc + item.price * item.quantita, 0);
@@ -30,10 +30,27 @@ const Checkout = () => {
 
     const confermaOrdine = async () => {
         setElaborazione(true);
-        await Promise.all(selezionati.map((item) => rimuovi(item.chiave)));
-        setOrdine(numeroOrdine());
-        setElaborazione(false);
-        setFase("confermato");
+        setErroreConferma("");
+        try {
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ indirizzo, items: selezionati, total }),
+            });
+            const dati = await response.json();
+            if (!response.ok) {
+                setErroreConferma(dati.errore ?? "Errore durante la conferma dell'ordine");
+                return;
+            }
+            await Promise.all(selezionati.map((item) => rimuovi(item.chiave)));
+            setOrdine(dati.ordine);
+            setEmailInviata(dati.emailInviata);
+            setFase("confermato");
+        } catch {
+            setErroreConferma("Errore di rete, riprova");
+        } finally {
+            setElaborazione(false);
+        }
     };
 
     if (fase === "confermato" && ordine) {
@@ -48,8 +65,11 @@ const Checkout = () => {
                     <h1 className="text-xl font-bold text-gray-900 mb-1">Ordine confermato!</h1>
                     <p className="text-sm text-gray-500 mb-4">Grazie per il tuo acquisto.</p>
                     <p className="text-xs text-gray-400 mb-1">Numero ordine <span className="font-mono text-gray-600">{ordine}</span></p>
-                    <p className="text-xs text-gray-400 mb-6">
+                    <p className="text-xs text-gray-400 mb-1">
                         Consegna a {indirizzo.nome} · {indirizzo.via}, {indirizzo.citta} {indirizzo.cap}
+                    </p>
+                    <p className={`text-xs mb-6 ${emailInviata ? "text-gray-400" : "text-amber-600"}`}>
+                        {emailInviata ? "Email di conferma inviata." : "Non siamo riusciti a inviarti l'email di conferma."}
                     </p>
                     <Link href="/dashboard" className="block w-full bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
                         Torna allo shopping
@@ -179,18 +199,21 @@ const Checkout = () => {
             </div>
 
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-                <div className="max-w-2xl mx-auto px-6 md:px-8 py-4 flex items-center justify-between gap-4">
-                    <div>
-                        <p className="text-xs text-gray-500">Totale</p>
-                        <p className="text-xl font-bold text-gray-900">{total.toFixed(2)}€</p>
+                <div className="max-w-2xl mx-auto px-6 md:px-8 py-4">
+                    {erroreConferma && <p className="text-red-500 text-xs mb-2">{erroreConferma}</p>}
+                    <div className="flex items-center justify-between gap-4">
+                        <div>
+                            <p className="text-xs text-gray-500">Totale</p>
+                            <p className="text-xl font-bold text-gray-900">{total.toFixed(2)}€</p>
+                        </div>
+                        <button
+                            onClick={confermaOrdine}
+                            disabled={elaborazione}
+                            className="bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-6 py-3 rounded-xl transition-colors shrink-0"
+                        >
+                            {elaborazione ? "Conferma in corso..." : "Conferma ordine"}
+                        </button>
                     </div>
-                    <button
-                        onClick={confermaOrdine}
-                        disabled={elaborazione}
-                        className="bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-6 py-3 rounded-xl transition-colors shrink-0"
-                    >
-                        {elaborazione ? "Conferma in corso..." : "Conferma ordine"}
-                    </button>
                 </div>
             </div>
         </div>
