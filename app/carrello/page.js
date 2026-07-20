@@ -135,8 +135,9 @@ const Carrello = () => {
                         <p className="text-xl font-bold text-gray-900">{total.toFixed(2)}€</p>
                     </div>
                     <button
-                        onClick={() => alert("Funzionalità di pagamento non ancora disponibile")}
-                        className="bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium px-6 py-3 rounded-xl transition-colors shrink-0"
+                        onClick={() => router.push("/checkout")}
+                        disabled={total === 0}
+                        className="bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-6 py-3 rounded-xl transition-colors shrink-0"
                     >
                         Acquista ora
                     </button>
