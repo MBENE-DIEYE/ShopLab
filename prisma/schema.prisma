@@ -17,6 +17,7 @@ model User {
   passwordHash   String
   createdAt      DateTime   @default(now())
   cartItems      CartItem[]
+  ordini         Ordine[]
   ultimoIndirizzo Json?
 }
 
@@ -31,4 +32,27 @@ model CartItem {
   selezionatoAt DateTime? // quando è stato selezionato l'ultima volta; null = non selezionato
 
   @@unique([userId, productId, taglia])
+}
+
+model Ordine {
+  id        String              @id @default(cuid())
+  numero    String              @unique
+  userId    String
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  indirizzo Json
+  totale    Float
+  createdAt DateTime            @default(now())
+  articoli  ArticoloOrdinato[]
+}
+
+model ArticoloOrdinato {
+  id        String  @id @default(cuid())
+  ordineId  String
+  ordine    Ordine  @relation(fields: [ordineId], references: [id], onDelete: Cascade)
+  productId Int
+  title     String
+  image     String?
+  price     Float
+  quantita  Int
+  taglia    String?
 }
