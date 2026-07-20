@@ -10,6 +10,7 @@ const Checkout = () => {
     const [fase, setFase] = useState("indirizzo"); // indirizzo -> riepilogo -> confermato
     const [indirizzo, setIndirizzo] = useState(INDIRIZZO_VUOTO);
     const [erroreIndirizzo, setErroreIndirizzo] = useState("");
+    const [verificandoIndirizzo, setVerificandoIndirizzo] = useState(false);
     const [elaborazione, setElaborazione] = useState(false);
     const [ordine, setOrdine] = useState(null);
     const [emailInviata, setEmailInviata] = useState(true);
@@ -18,14 +19,31 @@ const Checkout = () => {
     const selezionati = carrello.filter((item) => item.selezionato);
     const total = selezionati.reduce((acc, item) => acc + item.price * item.quantita, 0);
 
-    const confermaIndirizzo = (e) => {
+    const confermaIndirizzo = async (e) => {
         e.preventDefault();
         if (!indirizzo.nome || !indirizzo.via || !indirizzo.citta || !indirizzo.cap) {
             setErroreIndirizzo("Compila tutti i campi");
             return;
         }
         setErroreIndirizzo("");
-        setFase("riepilogo");
+        setVerificandoIndirizzo(true);
+        try {
+            const response = await fetch("/api/indirizzo/verifica", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ citta: indirizzo.citta, cap: indirizzo.cap }),
+            });
+            const dati = await response.json();
+            if (!dati.valido) {
+                setErroreIndirizzo(dati.errore ?? "Indirizzo non valido");
+                return;
+            }
+            setFase("riepilogo");
+        } catch {
+            setErroreIndirizzo("Errore di rete, riprova");
+        } finally {
+            setVerificandoIndirizzo(false);
+        }
     };
 
     const confermaOrdine = async () => {
@@ -145,8 +163,12 @@ const Checkout = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
-                            Continua
+                        <button
+                            type="submit"
+                            disabled={verificandoIndirizzo}
+                            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+                        >
+                            {verificandoIndirizzo ? "Verifica in corso..." : "Continua"}
                         </button>
 
                         <Link href="/carrello" className="block text-sm text-gray-500 text-center mt-4 hover:underline">← Torna al carrello</Link>
