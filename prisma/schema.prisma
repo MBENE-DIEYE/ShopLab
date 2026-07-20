@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  cartItems    CartItem[]
+}
+
+model CartItem {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId     Int
+  taglia        String?
+  quantita      Int       @default(1)
+  createdAt     DateTime  @default(now())
+  selezionatoAt DateTime? // quando è stato selezionato l'ultima volta; null = non selezionato
+
+  @@unique([userId, productId, taglia])
+}

@@ -4,32 +4,32 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCarrello } from "@/context/CarrelloContext";
 
-const Login = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [mostraPassword, setMostraPassword] = useState(false)
+const Registrati = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [mostraPassword, setMostraPassword] = useState(false);
     const [errore, setErrore] = useState("");
     const [caricamento, setCaricamento] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
     const { ricaricaCarrello } = useCarrello();
 
-    const entra = async (e) => {
+    const registra = async (e) => {
         e.preventDefault();
         if (!email || !password) {
-            setErrore("Compila tutti i campi")
+            setErrore("Compila tutti i campi");
             return;
         }
-        setErrore("")
-        setCaricamento(true)
+        setErrore("");
+        setCaricamento(true);
         try {
-            const response = await fetch("/api/auth/login", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
             const dati = await response.json();
             if (!response.ok) {
-                setErrore(dati.errore ?? "Errore durante l'accesso");
+                setErrore(dati.errore ?? "Errore durante la registrazione");
                 return;
             }
             await ricaricaCarrello();
@@ -39,7 +39,7 @@ const Login = () => {
         } finally {
             setCaricamento(false);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-gray-50 to-white p-6">
@@ -49,9 +49,9 @@ const Login = () => {
                     <span className="text-lg font-bold text-gray-900">ShopLab</span>
                 </div>
 
-                <form onSubmit={entra} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-1">Accedi</h1>
-                    <p className="text-sm text-gray-500 mb-6">Inserisci le tue credenziali per continuare</p>
+                <form onSubmit={registra} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+                    <h1 className="text-2xl font-bold text-gray-900 mb-1">Crea un account</h1>
+                    <p className="text-sm text-gray-500 mb-6">Registrati per iniziare a fare acquisti</p>
 
                     {errore && (
                         <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4">
@@ -64,29 +64,23 @@ const Login = () => {
 
                     <label className="block text-xs font-medium text-gray-600 mb-1.5">Email</label>
                     <div className="relative mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                        </svg>
                         <input
                             type="email"
                             placeholder="nome@esempio.it"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
                         />
                     </div>
 
                     <label className="block text-xs font-medium text-gray-600 mb-1.5">Password</label>
                     <div className="relative mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                        </svg>
                         <input
                             type={mostraPassword ? "text" : "password"}
-                            placeholder="••••••••"
+                            placeholder="Almeno 6 caratteri"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
                         />
                         <button
                             type="button"
@@ -107,15 +101,15 @@ const Login = () => {
                     </div>
 
                     <button type="submit" disabled={caricamento} className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
-                        {caricamento ? "Accesso in corso..." : "Accedi"}
+                        {caricamento ? "Creazione account..." : "Crea account"}
                     </button>
 
                     <p className="text-sm text-gray-500 text-center mt-4">
-                        Non hai un account? <Link href="/register" className="text-indigo-600 font-medium hover:underline">Registrati</Link>
+                        Hai già un account? <Link href="/" className="text-indigo-600 font-medium hover:underline">Accedi</Link>
                     </p>
                 </form>
             </div>
         </div>
-    )
-}
-export default Login;
+    );
+};
+export default Registrati;
