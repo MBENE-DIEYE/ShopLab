@@ -1,28 +1,42 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useCarrello } from "@/context/CarrelloContext";
 
 const numeroOrdine = () => `SL-${Math.floor(100000 + Math.random() * 900000)}`;
 
+const INDIRIZZO_VUOTO = { nome: "", via: "", citta: "", cap: "" };
+
 const Checkout = () => {
     const { carrello, rimuovi } = useCarrello();
-    const router = useRouter();
+    const [fase, setFase] = useState("indirizzo"); // indirizzo -> riepilogo -> confermato
+    const [indirizzo, setIndirizzo] = useState(INDIRIZZO_VUOTO);
+    const [erroreIndirizzo, setErroreIndirizzo] = useState("");
     const [elaborazione, setElaborazione] = useState(false);
     const [ordine, setOrdine] = useState(null);
 
     const selezionati = carrello.filter((item) => item.selezionato);
     const total = selezionati.reduce((acc, item) => acc + item.price * item.quantita, 0);
 
+    const confermaIndirizzo = (e) => {
+        e.preventDefault();
+        if (!indirizzo.nome || !indirizzo.via || !indirizzo.citta || !indirizzo.cap) {
+            setErroreIndirizzo("Compila tutti i campi");
+            return;
+        }
+        setErroreIndirizzo("");
+        setFase("riepilogo");
+    };
+
     const confermaOrdine = async () => {
         setElaborazione(true);
         await Promise.all(selezionati.map((item) => rimuovi(item.chiave)));
         setOrdine(numeroOrdine());
         setElaborazione(false);
+        setFase("confermato");
     };
 
-    if (ordine) {
+    if (fase === "confermato" && ordine) {
         return (
             <div className="min-h-screen bg-linear-to-b from-gray-50 to-white flex items-center justify-center p-6">
                 <div className="w-full max-w-sm text-center bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
@@ -33,7 +47,10 @@ const Checkout = () => {
                     </div>
                     <h1 className="text-xl font-bold text-gray-900 mb-1">Ordine confermato!</h1>
                     <p className="text-sm text-gray-500 mb-4">Grazie per il tuo acquisto.</p>
-                    <p className="text-xs text-gray-400 mb-6">Numero ordine <span className="font-mono text-gray-600">{ordine}</span></p>
+                    <p className="text-xs text-gray-400 mb-1">Numero ordine <span className="font-mono text-gray-600">{ordine}</span></p>
+                    <p className="text-xs text-gray-400 mb-6">
+                        Consegna a {indirizzo.nome} · {indirizzo.via}, {indirizzo.citta} {indirizzo.cap}
+                    </p>
                     <Link href="/dashboard" className="block w-full bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
                         Torna allo shopping
                     </Link>
@@ -53,11 +70,84 @@ const Checkout = () => {
         );
     }
 
+    if (fase === "indirizzo") {
+        return (
+            <div className="min-h-screen bg-linear-to-b from-gray-50 to-white flex items-center justify-center p-6">
+                <div className="w-full max-w-sm">
+                    <h1 className="text-2xl font-bold mb-1 text-gray-900 text-center">Indirizzo di consegna</h1>
+                    <p className="text-sm text-gray-500 text-center mb-6">Dove vuoi ricevere il tuo ordine?</p>
+
+                    <form onSubmit={confermaIndirizzo} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+                        {erroreIndirizzo && (
+                            <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4">
+                                {erroreIndirizzo}
+                            </div>
+                        )}
+
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Nome e cognome</label>
+                        <input
+                            type="text"
+                            placeholder="Mario Rossi"
+                            value={indirizzo.nome}
+                            onChange={(e) => setIndirizzo((prev) => ({ ...prev, nome: e.target.value }))}
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                        />
+
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Indirizzo</label>
+                        <input
+                            type="text"
+                            placeholder="Via Roma 10"
+                            value={indirizzo.via}
+                            onChange={(e) => setIndirizzo((prev) => ({ ...prev, via: e.target.value }))}
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                        />
+
+                        <div className="flex gap-3 mb-6">
+                            <div className="flex-1">
+                                <label className="block text-xs font-medium text-gray-600 mb-1.5">Città</label>
+                                <input
+                                    type="text"
+                                    placeholder="Milano"
+                                    value={indirizzo.citta}
+                                    onChange={(e) => setIndirizzo((prev) => ({ ...prev, citta: e.target.value }))}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                                />
+                            </div>
+                            <div className="w-24">
+                                <label className="block text-xs font-medium text-gray-600 mb-1.5">CAP</label>
+                                <input
+                                    type="text"
+                                    placeholder="20100"
+                                    value={indirizzo.cap}
+                                    onChange={(e) => setIndirizzo((prev) => ({ ...prev, cap: e.target.value }))}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                                />
+                            </div>
+                        </div>
+
+                        <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
+                            Continua
+                        </button>
+
+                        <Link href="/carrello" className="block text-sm text-gray-500 text-center mt-4 hover:underline">← Torna al carrello</Link>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-linear-to-b from-gray-50 to-white pb-24">
             <div className="max-w-2xl mx-auto p-6 md:p-8">
                 <h1 className="text-2xl font-bold mb-3 text-gray-900 text-center">Riepilogo ordine</h1>
-                <Link href="/carrello" className="block mb-6 text-indigo-600 text-sm font-medium hover:underline">← Torna al carrello</Link>
+                <button onClick={() => setFase("indirizzo")} className="block mb-6 text-indigo-600 text-sm font-medium hover:underline">← Modifica indirizzo</button>
+
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-6">
+                    <h2 className="text-sm font-semibold text-gray-900 mb-2">Consegna a</h2>
+                    <p className="text-sm text-gray-600">{indirizzo.nome}</p>
+                    <p className="text-sm text-gray-600">{indirizzo.via}</p>
+                    <p className="text-sm text-gray-600">{indirizzo.cap} {indirizzo.citta}</p>
+                </div>
 
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden mb-6">
                     {selezionati.map((item) => (
