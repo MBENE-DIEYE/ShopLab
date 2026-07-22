@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCarrello } from "@/context/CarrelloContext";
+import { formattaPrezzo } from "@/utils/valuta";
 
 const INDIRIZZO_VUOTO = { nome: "", via: "", citta: "", cap: "" };
 
@@ -217,7 +218,7 @@ const Checkout = () => {
                                     Quantità {item.quantita}{item.taglia && <span className="text-gray-400"> · Taglia {item.taglia}</span>}
                                 </p>
                             </div>
-                            <span className="text-sm font-semibold text-gray-900 shrink-0">{(item.price * item.quantita).toFixed(2)}€</span>
+                            <span className="text-sm font-semibold text-gray-900 shrink-0">{formattaPrezzo(item.price * item.quantita)}</span>
                         </div>
                     ))}
                 </div>
@@ -240,7 +241,7 @@ const Checkout = () => {
                     <div className="flex items-center justify-between gap-4">
                         <div>
                             <p className="text-xs text-gray-500">Totale</p>
-                            <p className="text-xl font-bold text-gray-900">{total.toFixed(2)}€</p>
+                            <p className="text-xl font-bold text-gray-900">{formattaPrezzo(total)}</p>
                         </div>
                         <button
                             onClick={confermaOrdine}

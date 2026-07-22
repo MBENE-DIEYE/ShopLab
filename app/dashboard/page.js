@@ -4,6 +4,7 @@ import { useCarrello } from "@/context/CarrelloContext";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { traduciCategoria, richiedeTaglia, TAGLIE_DISPONIBILI } from "@/utils/categorie";
+import { formattaPrezzo } from "@/utils/valuta";
 import Stelle from "@/components/Stelle";
 
 const Dashboard = () => (
@@ -173,12 +174,12 @@ const DashboardContenuto = () => {
                                     )}
                                 </Link>
                                 <div className="p-4 flex flex-col flex-1">
-                                    <Link href={`/prodotto/${p.id}`} onClick={(e) => e.stopPropagation()} className="block font-medium text-sm text-gray-800 line-clamp-2 mb-1.5 hover:text-indigo-600 transition-colors">
+                                    <Link href={`/prodotto/${p.id}`} onClick={(e) => e.stopPropagation()} className="block min-h-10 font-medium text-sm text-gray-800 line-clamp-2 mb-1.5 hover:text-indigo-600 transition-colors">
                                         {p.title}
                                     </Link>
                                     <Stelle rating={p.rating} />
                                     <div className="flex items-center justify-between mt-2 mb-3">
-                                        <span className="text-lg font-bold text-gray-900">{p.price}€</span>
+                                        <span className="text-lg font-bold text-gray-900">{formattaPrezzo(p.price)}</span>
                                     </div>
                                     <button
                                         onClick={(e) => handleAggiungi(e, p)}

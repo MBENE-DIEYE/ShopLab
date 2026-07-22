@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCarrello } from "@/context/CarrelloContext";
 import BarraIcone from "@/components/BarraIcone";
+import { formattaPrezzo } from "@/utils/valuta";
 
 const Carrello = () => {
     const { carrello, rimuovi, aggiungi, diminuisci, toggleSelezione, toggleSelezionaTutto } = useCarrello()
@@ -86,7 +87,7 @@ const Carrello = () => {
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-medium text-sm text-gray-800 truncate">{item.title}</h3>
                                     <p className="text-sm text-gray-500 mt-1">
-                                        {item.price}€{item.taglia && <span className="text-gray-400"> · Taglia {item.taglia}</span>}
+                                        {formattaPrezzo(item.price)}{item.taglia && <span className="text-gray-400"> · Taglia {item.taglia}</span>}
                                     </p>
                                 </div>
 
@@ -132,7 +133,7 @@ const Carrello = () => {
                 <div className="max-w-3xl mx-auto px-6 md:px-8 py-4 flex items-center justify-between gap-4">
                     <div>
                         <p className="text-xs text-gray-500">Totale</p>
-                        <p className="text-xl font-bold text-gray-900">{total.toFixed(2)}€</p>
+                        <p className="text-xl font-bold text-gray-900">{formattaPrezzo(total)}</p>
                     </div>
                     <button
                         onClick={() => router.push("/checkout")}
@@ -175,7 +176,7 @@ const Carrello = () => {
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-sm text-gray-800 truncate">{p.title}</p>
-                                                <p className="text-sm text-gray-500">{p.price}€</p>
+                                                <p className="text-sm text-gray-500">{formattaPrezzo(p.price)}</p>
                                             </div>
                                             <button
                                                 onClick={() => aggiungi(p)}

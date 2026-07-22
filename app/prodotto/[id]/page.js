@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCarrello } from "@/context/CarrelloContext";
 import { traduciCategoria, richiedeTaglia, TAGLIE_DISPONIBILI } from "@/utils/categorie";
 import { traduciDescrizione } from "@/utils/descrizioni";
+import { formattaPrezzo } from "@/utils/valuta";
 import Stelle from "@/components/Stelle";
 import BarraIcone from "@/components/BarraIcone";
 
@@ -106,7 +107,7 @@ const ProdottoDettaglio = () => {
                         </span>
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">{prodotto.title}</h1>
                         <Stelle rating={prodotto.rating} size="h-4 w-4" />
-                        <p className="text-3xl font-bold text-gray-900 mt-4 mb-4">{prodotto.price}€</p>
+                        <p className="text-3xl font-bold text-gray-900 mt-4 mb-4">{formattaPrezzo(prodotto.price)}</p>
                         <p className="text-sm text-gray-600 leading-relaxed mb-6">{traduciDescrizione(prodotto)}</p>
 
                         {richiedeTaglia(prodotto.category) && (
@@ -172,7 +173,7 @@ const ProdottoDettaglio = () => {
                                         <img src={p.image} alt={p.title} className="h-16 w-16 object-contain" />
                                     </div>
                                     <p className="text-xs text-gray-800 line-clamp-2 mb-1">{p.title}</p>
-                                    <p className="text-sm font-semibold text-gray-900">{p.price}€</p>
+                                    <p className="text-sm font-semibold text-gray-900">{formattaPrezzo(p.price)}</p>
                                 </button>
                             ))}
                         </div>

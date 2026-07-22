@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BarraIcone from "@/components/BarraIcone";
+import { formattaPrezzo } from "@/utils/valuta";
 
 const formattaData = (iso) =>
     new Date(iso).toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
@@ -88,7 +89,7 @@ const MieiOrdini = () => {
                                         <p className="text-xs text-gray-500">{formattaData(ordine.createdAt)}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-lg font-bold text-gray-900">{ordine.totale.toFixed(2)}€</p>
+                                        <p className="text-lg font-bold text-gray-900">{formattaPrezzo(ordine.totale)}</p>
                                         <span className={`inline-block text-[11px] font-medium px-2 py-0.5 rounded-full mt-1 ${COLORI_STATO[ordine.tracking.stato]}`}>
                                             {ordine.tracking.etichetta}
                                         </span>
@@ -117,7 +118,7 @@ const MieiOrdini = () => {
                                                             Quantità {articolo.quantita}{articolo.taglia && <span className="text-gray-400"> · Taglia {articolo.taglia}</span>}
                                                         </p>
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-900 shrink-0">{(articolo.price * articolo.quantita).toFixed(2)}€</span>
+                                                    <span className="text-sm font-medium text-gray-900 shrink-0">{formattaPrezzo(articolo.price * articolo.quantita)}</span>
                                                 </button>
 
                                                 {isEspanso && (
