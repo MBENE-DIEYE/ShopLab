@@ -173,13 +173,15 @@ const Account = () => {
                             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
                         />
 
-                        <button
-                            type="submit"
-                            disabled={salvandoPassword}
-                            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
-                        >
-                            {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
-                        </button>
+                        <div className="flex justify-end">
+                            <button
+                                type="submit"
+                                disabled={salvandoPassword}
+                                className="bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 px-6 rounded-xl transition-colors"
+                            >
+                                {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
+                            </button>
+                        </div>
                     </form>
                 )}
 
