@@ -166,9 +166,6 @@ const DashboardContenuto = () => {
                             >
                                 <Link href={`/prodotto/${p.id}`} onClick={(e) => e.stopPropagation()} className="relative h-44 w-full bg-gray-50 overflow-hidden block">
                                     <img src={p.image} alt={p.title} className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
-                                    <span className="absolute top-3 left-3 bg-neutral-900/80 text-white text-xs font-medium px-2 py-1 rounded-full">
-                                        {traduciCategoria(p.category)}
-                                    </span>
                                     {appenaAggiunto === p.id && (
                                         <span className="absolute top-3 right-3 bg-indigo-600 text-white text-[11px] font-medium px-2 py-1 rounded-full">
                                             Aggiunto
