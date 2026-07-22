@@ -35,6 +35,15 @@ const Account = () => {
         caricaUtente();
     }, []);
 
+    const annullaCambioPassword = () => {
+        setMostraCambioPassword(false);
+        setErroreCambioPassword("");
+        setSuccessoCambioPassword(false);
+        setPasswordAttuale("");
+        setNuovaPassword("");
+        setConfermaPassword("");
+    };
+
     const cambiaPassword = async (e) => {
         e.preventDefault();
         setErroreCambioPassword("");
@@ -153,13 +162,22 @@ const Account = () => {
                             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
                         />
 
-                        <button
-                            type="submit"
-                            disabled={salvandoPassword}
-                            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
-                        >
-                            {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
-                        </button>
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                onClick={annullaCambioPassword}
+                                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2.5 rounded-xl transition-colors"
+                            >
+                                Annulla
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={salvandoPassword}
+                                className="flex-1 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+                            >
+                                {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
+                            </button>
+                        </div>
                     </form>
                 )}
 
@@ -168,15 +186,25 @@ const Account = () => {
                         <p className="text-xs text-red-600 mb-2">{erroreEliminazione}</p>
                     )}
                     {confermaEliminazione && (
-                        <p className="text-xs text-gray-500 mb-2">Clicca di nuovo per confermare, l&apos;azione non si può annullare.</p>
+                        <p className="text-xs text-gray-500 mb-2">Sei sicuro? L&apos;azione non si può annullare.</p>
                     )}
-                    <button
-                        onClick={() => (confermaEliminazione ? eliminaAccount() : setConfermaEliminazione(true))}
-                        disabled={eliminando}
-                        className="text-sm text-red-500 hover:text-red-700 font-medium transition-colors disabled:opacity-60"
-                    >
-                        {eliminando ? "Eliminazione..." : confermaEliminazione ? "Conferma eliminazione" : "Elimina account"}
-                    </button>
+                    <div className="flex items-center justify-center gap-4">
+                        {confermaEliminazione && (
+                            <button
+                                onClick={() => setConfermaEliminazione(false)}
+                                className="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors"
+                            >
+                                Annulla
+                            </button>
+                        )}
+                        <button
+                            onClick={() => (confermaEliminazione ? eliminaAccount() : setConfermaEliminazione(true))}
+                            disabled={eliminando}
+                            className="text-sm text-red-500 hover:text-red-700 font-medium transition-colors disabled:opacity-60"
+                        >
+                            {eliminando ? "Eliminazione..." : confermaEliminazione ? "Conferma eliminazione" : "Elimina account"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
