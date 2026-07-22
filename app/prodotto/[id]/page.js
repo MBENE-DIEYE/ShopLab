@@ -90,7 +90,6 @@ const ProdottoDettaglio = () => {
             <BarraIcone />
 
             <div className="max-w-4xl mx-auto p-6">
-                <Link href="/dashboard" className="inline-block mb-4 text-indigo-600 text-sm font-medium hover:underline">← Torna ai prodotti</Link>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="relative h-80 md:h-96 bg-white rounded-2xl border border-gray-100 flex items-center justify-center p-8">
                         <img src={prodotto.image} alt={prodotto.title} className="max-h-full max-w-full object-contain" />
