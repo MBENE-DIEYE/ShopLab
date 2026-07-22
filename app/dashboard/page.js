@@ -91,7 +91,7 @@ const DashboardContenuto = () => {
         <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
             <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-100">
                 <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
-                    <h1 className="text-lg font-bold text-gray-900 shrink-0">ShopLab</h1>
+                    <button onClick={() => window.location.reload()} className="text-lg font-bold text-gray-900 shrink-0">ShopLab</button>
                     <div className="relative flex-1">
                         <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
