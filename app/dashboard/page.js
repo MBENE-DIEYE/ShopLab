@@ -174,7 +174,7 @@ const DashboardContenuto = () => {
                                     )}
                                 </Link>
                                 <div className="p-4 flex flex-col flex-1">
-                                    <Link href={`/prodotto/${p.id}`} onClick={(e) => e.stopPropagation()} className="block min-h-10 font-medium text-sm text-gray-800 line-clamp-2 mb-1.5 hover:text-indigo-600 transition-colors">
+                                    <Link href={`/prodotto/${p.id}`} onClick={(e) => e.stopPropagation()} className="min-h-10 font-medium text-sm text-gray-800 line-clamp-2 mb-1.5 hover:text-indigo-600 transition-colors">
                                         {p.title}
                                     </Link>
                                     <Stelle rating={p.rating} />
