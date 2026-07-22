@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCarrello } from "@/context/CarrelloContext";
+import BarraIcone from "@/components/BarraIcone";
 
 const Account = () => {
     const router = useRouter();
@@ -99,11 +100,11 @@ const Account = () => {
     };
 
     return (
-        <div className="min-h-screen bg-linear-to-b from-gray-50 to-white p-6">
-            <div className="max-w-sm mx-auto">
+        <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+            <BarraIcone />
+            <div className="max-w-sm mx-auto p-6">
                 <h1 className="text-2xl font-bold mb-1 text-gray-900 text-center">Il mio account</h1>
                 <p className="text-sm text-gray-500 text-center mb-6">{email}</p>
-                <Link href="/dashboard" className="block mb-6 text-indigo-600 text-sm font-medium hover:underline text-center">← Torna allo shopping</Link>
 
                 <Link href="/ordini" className="flex items-center justify-between bg-white p-5 rounded-2xl border border-gray-100 shadow-sm mb-6 hover:border-indigo-200 transition-colors">
                     <div className="flex items-center gap-3">

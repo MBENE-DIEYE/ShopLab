@@ -6,6 +6,7 @@ import { useCarrello } from "@/context/CarrelloContext";
 import { traduciCategoria, richiedeTaglia, TAGLIE_DISPONIBILI } from "@/utils/categorie";
 import { traduciDescrizione } from "@/utils/descrizioni";
 import Stelle from "@/components/Stelle";
+import BarraIcone from "@/components/BarraIcone";
 
 const ProdottoDettaglio = () => {
     const { id } = useParams();
@@ -86,23 +87,10 @@ const ProdottoDettaglio = () => {
 
     return (
         <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
-            <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-100">
-                <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <Link href="/dashboard" className="text-indigo-600 text-sm font-medium hover:underline">← Torna ai prodotti</Link>
-                    <Link href="/carrello" className="relative flex items-center justify-center bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.94-4.693 2.442-7.152.083-.402-.226-.774-.633-.774H5.106M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                        </svg>
-                        {carrello.length > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                {carrello.length}
-                            </span>
-                        )}
-                    </Link>
-                </div>
-            </header>
+            <BarraIcone />
 
             <div className="max-w-4xl mx-auto p-6">
+                <Link href="/dashboard" className="inline-block mb-4 text-indigo-600 text-sm font-medium hover:underline">← Torna ai prodotti</Link>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="relative h-80 md:h-96 bg-white rounded-2xl border border-gray-100 flex items-center justify-center p-8">
                         <img src={prodotto.image} alt={prodotto.title} className="max-h-full max-w-full object-contain" />

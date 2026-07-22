@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCarrello } from "@/context/CarrelloContext";
+import BarraIcone from "@/components/BarraIcone";
 
 const Carrello = () => {
     const { carrello, rimuovi, aggiungi, diminuisci, toggleSelezione, toggleSelezionaTutto } = useCarrello()
@@ -31,19 +31,19 @@ const Carrello = () => {
     }
 
     if (carrello.length === 0) return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-            <div className="text-center">
-                <p className="text-gray-500 mb-4">Il carrello è vuoto</p>
-                <Link href="/dashboard" className="text-indigo-600 font-medium hover:underline">Torna allo shopping</Link>
+        <div className="min-h-screen bg-gray-50">
+            <BarraIcone />
+            <div className="flex items-center justify-center py-24">
+                <p className="text-gray-500">Il carrello è vuoto</p>
             </div>
         </div>
     )
 
     return (
         <div className="min-h-screen bg-linear-to-b from-gray-50 to-white pb-24">
+            <BarraIcone />
             <div className="max-w-3xl mx-auto p-6 md:p-8">
-                <h1 className="text-2xl font-bold mb-3 text-gray-900 text-center">Il tuo carrello ({carrello.length})</h1>
-                <Link href="/dashboard" className="block mb-6 text-indigo-600 text-sm font-medium hover:underline">← Continua lo shopping</Link>
+                <h1 className="text-2xl font-bold mb-6 text-gray-900 text-center">Il tuo carrello ({carrello.length})</h1>
 
                 <div className="flex items-center gap-2 mb-3">
                     <button
