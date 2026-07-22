@@ -193,6 +193,13 @@ const Account = () => {
                         <p className="text-xs text-gray-500 mb-2">Sei sicuro? L&apos;azione non si può annullare.</p>
                     )}
                     <div className="flex items-center justify-center gap-4">
+                        <button
+                            onClick={() => (confermaEliminazione ? eliminaAccount() : setConfermaEliminazione(true))}
+                            disabled={eliminando}
+                            className="text-sm text-red-500 hover:text-red-700 font-medium transition-colors disabled:opacity-60"
+                        >
+                            {eliminando ? "Eliminazione..." : confermaEliminazione ? "Conferma eliminazione" : "Elimina account"}
+                        </button>
                         {confermaEliminazione && (
                             <button
                                 onClick={() => setConfermaEliminazione(false)}
@@ -201,13 +208,6 @@ const Account = () => {
                                 Annulla
                             </button>
                         )}
-                        <button
-                            onClick={() => (confermaEliminazione ? eliminaAccount() : setConfermaEliminazione(true))}
-                            disabled={eliminando}
-                            className="text-sm text-red-500 hover:text-red-700 font-medium transition-colors disabled:opacity-60"
-                        >
-                            {eliminando ? "Eliminazione..." : confermaEliminazione ? "Conferma eliminazione" : "Elimina account"}
-                        </button>
                     </div>
                 </div>
             </div>
