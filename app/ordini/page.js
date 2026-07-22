@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BarraIcone from "@/components/BarraIcone";
 
@@ -69,8 +68,7 @@ const MieiOrdini = () => {
         <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
             <BarraIcone />
             <div className="max-w-2xl mx-auto p-6 md:p-8">
-                <h1 className="text-2xl font-bold mb-3 text-gray-900 text-center">I miei ordini</h1>
-                <Link href="/account" className="block mb-6 text-indigo-600 text-sm font-medium hover:underline">← Torna al profilo</Link>
+                <h1 className="text-2xl font-bold mb-6 text-gray-900 text-center">I miei ordini</h1>
 
                 {caricamento ? (
                     <div className="space-y-4">
