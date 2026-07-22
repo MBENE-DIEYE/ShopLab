@@ -120,15 +120,26 @@ const Account = () => {
                 </Link>
 
                 {!mostraCambioPassword ? (
-                    <button
-                        onClick={() => setMostraCambioPassword(true)}
-                        className="w-full bg-white border border-gray-200 text-gray-700 hover:border-indigo-300 hover:text-indigo-600 text-sm font-medium py-2.5 rounded-xl transition-colors mb-6"
-                    >
-                        Cambia password
-                    </button>
+                    <div className="text-center mb-6">
+                        <button
+                            onClick={() => setMostraCambioPassword(true)}
+                            className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                        >
+                            Cambia password
+                        </button>
+                    </div>
                 ) : (
                     <form onSubmit={cambiaPassword} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm mb-6">
-                        <h2 className="text-base font-semibold text-gray-900 mb-4">Cambia password</h2>
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-base font-semibold text-gray-900">Cambia password</h2>
+                            <button
+                                type="button"
+                                onClick={annullaCambioPassword}
+                                className="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors"
+                            >
+                                Annulla
+                            </button>
+                        </div>
 
                         {erroreCambioPassword && (
                             <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4">{erroreCambioPassword}</div>
@@ -162,22 +173,13 @@ const Account = () => {
                             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
                         />
 
-                        <div className="flex gap-2">
-                            <button
-                                type="button"
-                                onClick={annullaCambioPassword}
-                                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2.5 rounded-xl transition-colors"
-                            >
-                                Annulla
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={salvandoPassword}
-                                className="flex-1 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
-                            >
-                                {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            disabled={salvandoPassword}
+                            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+                        >
+                            {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
+                        </button>
                     </form>
                 )}
 
