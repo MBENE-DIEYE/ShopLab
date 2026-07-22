@@ -77,7 +77,7 @@ const Login = () => {
                     </div>
 
                     <label className="block text-xs font-medium text-gray-600 mb-1.5">Password</label>
-                    <div className="relative mb-6">
+                    <div className="relative mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                         </svg>
@@ -105,6 +105,7 @@ const Login = () => {
                             )}
                         </button>
                     </div>
+                    <Link href="/password-dimenticata" className="block text-xs text-indigo-600 hover:underline mb-6">Password dimenticata?</Link>
 
                     <button type="submit" disabled={caricamento} className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
                         {caricamento ? "Accesso in corso..." : "Accedi"}

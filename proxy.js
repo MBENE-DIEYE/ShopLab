@@ -12,7 +12,8 @@ export async function proxy(request) {
     }
 
     try {
-        await jwtVerify(token, secret);
+        const { payload } = await jwtVerify(token, secret);
+        if (payload.scope !== "session") throw new Error("token non valido per una sessione");
         return NextResponse.next();
     } catch {
         return NextResponse.redirect(new URL("/", request.url));

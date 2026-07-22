@@ -16,6 +16,8 @@ const Account = () => {
     const [successoCambioPassword, setSuccessoCambioPassword] = useState(false);
     const [salvandoPassword, setSalvandoPassword] = useState(false);
 
+    const [mostraCambioPassword, setMostraCambioPassword] = useState(false);
+
     const [confermaEliminazione, setConfermaEliminazione] = useState(false);
     const [erroreEliminazione, setErroreEliminazione] = useState("");
     const [eliminando, setEliminando] = useState(false);
@@ -108,87 +110,73 @@ const Account = () => {
                     </svg>
                 </Link>
 
-                <form onSubmit={cambiaPassword} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm mb-6">
-                    <h2 className="text-base font-semibold text-gray-900 mb-4">Cambia password</h2>
-
-                    {erroreCambioPassword && (
-                        <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4">{erroreCambioPassword}</div>
-                    )}
-                    {successoCambioPassword && (
-                        <div className="bg-green-50 text-green-600 text-sm px-3 py-2 rounded-lg mb-4">Password aggiornata con successo.</div>
-                    )}
-
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Password attuale</label>
-                    <input
-                        type="password"
-                        value={passwordAttuale}
-                        onChange={(e) => setPasswordAttuale(e.target.value)}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
-                    />
-
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Nuova password</label>
-                    <input
-                        type="password"
-                        placeholder="Almeno 6 caratteri"
-                        value={nuovaPassword}
-                        onChange={(e) => setNuovaPassword(e.target.value)}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
-                    />
-
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Conferma nuova password</label>
-                    <input
-                        type="password"
-                        value={confermaPassword}
-                        onChange={(e) => setConfermaPassword(e.target.value)}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
-                    />
-
+                {!mostraCambioPassword ? (
                     <button
-                        type="submit"
-                        disabled={salvandoPassword}
-                        className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+                        onClick={() => setMostraCambioPassword(true)}
+                        className="w-full bg-white border border-gray-200 text-gray-700 hover:border-indigo-300 hover:text-indigo-600 text-sm font-medium py-2.5 rounded-xl transition-colors mb-6"
                     >
-                        {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
+                        Cambia password
                     </button>
-                </form>
+                ) : (
+                    <form onSubmit={cambiaPassword} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm mb-6">
+                        <h2 className="text-base font-semibold text-gray-900 mb-4">Cambia password</h2>
 
-                <div className="bg-white p-8 rounded-2xl border border-red-100 shadow-sm">
-                    <h2 className="text-base font-semibold text-red-600 mb-2">Elimina account</h2>
-                    <p className="text-sm text-gray-500 mb-4">
-                        Questa azione è irreversibile: verranno eliminati il tuo account, il carrello e lo storico ordini.
-                    </p>
+                        {erroreCambioPassword && (
+                            <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4">{erroreCambioPassword}</div>
+                        )}
+                        {successoCambioPassword && (
+                            <div className="bg-green-50 text-green-600 text-sm px-3 py-2 rounded-lg mb-4">Password aggiornata con successo.</div>
+                        )}
 
-                    {erroreEliminazione && (
-                        <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4">{erroreEliminazione}</div>
-                    )}
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Password attuale</label>
+                        <input
+                            type="password"
+                            value={passwordAttuale}
+                            onChange={(e) => setPasswordAttuale(e.target.value)}
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                        />
 
-                    {!confermaEliminazione ? (
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Nuova password</label>
+                        <input
+                            type="password"
+                            placeholder="Almeno 6 caratteri"
+                            value={nuovaPassword}
+                            onChange={(e) => setNuovaPassword(e.target.value)}
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                        />
+
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Conferma nuova password</label>
+                        <input
+                            type="password"
+                            value={confermaPassword}
+                            onChange={(e) => setConfermaPassword(e.target.value)}
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                        />
+
                         <button
-                            onClick={() => setConfermaEliminazione(true)}
-                            className="w-full bg-white border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium py-2.5 rounded-xl transition-colors"
+                            type="submit"
+                            disabled={salvandoPassword}
+                            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
                         >
-                            Elimina il mio account
+                            {salvandoPassword ? "Salvataggio..." : "Aggiorna password"}
                         </button>
-                    ) : (
-                        <div className="space-y-2">
-                            <p className="text-sm text-gray-700 font-medium">Sei sicuro? Non si può annullare.</p>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => setConfermaEliminazione(false)}
-                                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2.5 rounded-xl transition-colors"
-                                >
-                                    Annulla
-                                </button>
-                                <button
-                                    onClick={eliminaAccount}
-                                    disabled={eliminando}
-                                    className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
-                                >
-                                    {eliminando ? "Eliminazione..." : "Sì, elimina"}
-                                </button>
-                            </div>
-                        </div>
+                    </form>
+                )}
+
+                <div className="text-center">
+                    {erroreEliminazione && (
+                        <p className="text-xs text-red-600 mb-2">{erroreEliminazione}</p>
                     )}
+                    {confermaEliminazione && (
+                        <p className="text-xs text-gray-500 mb-2">Clicca di nuovo per confermare, l&apos;azione non si può annullare.</p>
+                    )}
+                    <button
+                        onClick={() => (confermaEliminazione ? eliminaAccount() : setConfermaEliminazione(true))}
+                        disabled={eliminando}
+                        className="text-sm text-red-500 hover:text-red-700 font-medium transition-colors disabled:opacity-60"
+                    >
+                        {eliminando ? "Eliminazione..." : confermaEliminazione ? "Conferma eliminazione" : "Elimina account"}
+                    </button>
                 </div>
             </div>
         </div>
